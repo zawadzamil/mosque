@@ -1,0 +1,223 @@
+
+.title-main{
+
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+
+}
+.clock-section{
+    top: 0;
+    background-color: black;
+    margin: 0px;
+    padding: 0px;
+}
+.clock{
+    top: 0;
+    margin: 0px !important;
+    padding: 0px !important;
+
+    max-height: 218px;
+
+}
+#time{
+    top: 0;
+    position: relative;
+
+    margin: 0px;
+    margin-top: 0;
+    padding: 0px;
+    color: rgb(255, 254, 254);
+    font-family: 'Lucidatypewriter';
+    font-size: 192px;
+    display: inline-block;
+    vertical-align: top;
+}
+#dateBottom{
+    position: relative;
+    float: right;
+    color: rgba(255, 254, 254, 0.945);
+    margin-top: 11%;
+    padding-right: 7px;
+    font-size: 37px;
+    font-family: serif;
+}
+
+
+body{
+    overflow: hidden;
+}
+
+
+th, td {
+    padding: 4px;
+    text-align: center;
+
+  }
+  th{
+    color: whitesmoke;
+  }
+  table{
+      width: 100%;
+      font-size:1.8em;
+      padding-left: 40px !important;
+
+  }
+  td{
+    box-shadow: rgba(0, 0, 0, 0.102) 0px 4px 0px;
+  }
+  #ban-table{
+    font-family: 'Mukti', Arial, sans-serif ;
+    }
+
+
+
+  img{
+      width: 100%;
+      max-height: 381px;
+      min-height: 369px;
+      box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  }
+  .imgbox{
+      width:80%;
+      height: 80%;
+      float: right;
+      margin-top: 2px;
+  }
+  .arabic{
+      font-family: 'Copperplate Gothic Light';
+      color: rgb(22, 22, 66);
+
+
+text-shadow: 1px 0px 1px #CCCCCC, 0px 1px 1px #afaaaa, 2px 1px 1px #CCCCCC, 1px 2px 1px #EEEEEE, 3px 2px 1px #CCCCCC, 2px 3px 1px #EEEEEE, 4px 3px 1px #CCCCCC, 3px 4px 1px #EEEEEE, 5px 4px 1px #CCCCCC, 4px 5px 1px #EEEEEE, 6px 5px 1px #CCCCCC, 5px 6px 1px #EEEEEE, 7px 6px 1px #CCCCCC;
+
+
+
+  }
+  .bangla{
+    font-family: 'Mukti', Arial, sans-serif ;
+      color: rgb(199, 15, 15);
+
+
+text-shadow: 1px 0px 1px #CCCCCC, 0px 1px 1px #afaaaa, 2px 1px 1px #CCCCCC, 1px 2px 1px #EEEEEE, 3px 2px 1px #CCCCCC, 2px 3px 1px #EEEEEE, 4px 3px 1px #CCCCCC, 3px 4px 1px #EEEEEE, 5px 4px 1px #CCCCCC, 4px 5px 1px #EEEEEE, 6px 5px 1px #CCCCCC, 5px 6px 1px #EEEEEE, 7px 6px 1px #CCCCCC;
+
+
+
+  }
+
+
+
+  .scrolling {
+	position: relative;
+	width: 100%;
+	height: 50px;
+	overflow: hidden;
+	margin-top: 10px;
+}
+.scrolling h3 {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	font-size: 2.5em;
+	text-align: center;
+	line-height: 24px;
+	color: #fff;
+	transform: translateX(100%);
+	animation: scrolling 30s linear infinite;
+}
+@keyframes scrolling {
+	0% {
+		transform: translateX(100%);
+	}
+	100% {
+		transform: translateX(-100%);
+	}
+}
+.slider-text{
+    background: rgb(0,1,22);
+background: linear-gradient(90deg, rgba(0,1,22,1) 0%, rgba(59,40,167,1) 52%, rgba(33,2,55,1) 100%);
+}
+
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 99px;
+    height: 34px;
+  }
+
+  .switch input {display:none;}
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #141552dc;
+    -webkit-transition: .4s;
+    transition: .4s;
+     border-radius: 34px;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  input:checked + .slider {
+    background-color: #cc1919;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(65px);
+  }
+  .on
+  {
+    display: none;
+  }
+
+  .on, .off
+  {
+    color: white;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+    font-size: 10px;
+    font-family: Verdana, sans-serif;
+  }
+
+  input:checked+ .slider .on
+  {display: block;}
+
+  input:checked + .slider .off
+  {display: none;}
+
+  /*--------- END --------*/
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;}
+
+    .example::-webkit-scrollbar {
+        display: none;
+      }
