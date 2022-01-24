@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Islamic Association</title>
+    <title>PTD-Prayer Time Display</title>
     <link rel="stylesheet" href="public/display/css/display.css" type="text/css" media="all">
     <!--Tailwind CSS-->
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
@@ -74,15 +74,15 @@
 
     <div class="min-h-screen  item-center text-center">
         <!--Toggle Switch-->
-        <label class="switch mt-4">
-            <input type="checkbox" id="togBtn">
-            <div class="slider round">
-             <!--ADDED HTML -->
-             <span class="on">বাংলা</span>
-             <span class="off">English</span>
-             <!--END-->
-            </div>
-           </label>
+{{--        <label class="switch mt-4">--}}
+{{--            <input type="checkbox" id="togBtn">--}}
+{{--            <div class="slider round">--}}
+{{--             <!--ADDED HTML -->--}}
+{{--             <span class="on">বাংলা</span>--}}
+{{--             <span class="off">English</span>--}}
+{{--             <!--END-->--}}
+{{--            </div>--}}
+{{--           </label>--}}
         <!--End Toggle Switch-->
         <div class="flex-1 max-w-8xl ">
             <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2  gap-1 grid-flow-row pb-4 ">

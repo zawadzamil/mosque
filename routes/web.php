@@ -18,12 +18,14 @@ Route::get('/','App\Http\Controllers\DashboardController@home');
 
 Route::get('get-cities', 'App\Http\Controllers\DashboardController@getCities')->name('getCities');
 Route::get('get-mosques', 'App\Http\Controllers\DashboardController@getMosque')->name('getMosque');
+Route::get('get-Valid-Mosque', 'App\Http\Controllers\DashboardController@getValidMosque')->name('getValidMosque');
 
 
 
 
 Route::get('select-mosques','App\Http\Controllers\DashboardController@select');
-Route::post('user-select-mosque','App\Http\Controllers\MosqueController@userSelect');
+Route::post('user-select-location','App\Http\Controllers\DashboardController@userSelectLocation');
+Route::post('user-select-mosque','App\Http\Controllers\DashboardController@userSelectMosque');
 
 Route::get('add-mosque','App\Http\Controllers\MosqueController@index');
 Route::post('addMosquetoDb','App\Http\Controllers\MosqueController@store');

@@ -1,65 +1,4 @@
-
-//--------------------- Copyright Block ----------------------
-/*
-
-PrayTimes.js: Prayer Times Calculator (ver 2.3)
-Copyright (C) 2007-2011 PrayTimes.org
-
-Developer: Hamid Zarrabi-Zadeh
-License: GNU LGPL v3.0
-
-TERMS OF USE:
-	Permission is granted to use this code, with or
-	without modification, in any website or application
-	provided that credit is given to the original work
-	with a link back to PrayTimes.org.
-
-This program is distributed in the hope that it will
-be useful, but WITHOUT ANY WARRANTY.
-
-PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
-
-*/
-
-
-//--------------------- Help and Manual ----------------------
-/*
-
-User's Manual:
-http://praytimes.org/manual
-
-Calculation Formulas:
-http://praytimes.org/calculation
-
-
-
-//------------------------ User Interface -------------------------
-
-
-	getTimes (date, coordinates [, timeZone [, dst [, timeFormat]]])
-
-	setMethod (method)       // set calculation method
-	adjust (parameters)      // adjust calculation parameters
-	tune (offsets)           // tune times by given offsets
-
-	getMethod ()             // get calculation method
-	getSetting ()            // get current calculation parameters
-	getOffsets ()            // get current time offsets
-
-
-//------------------------- Sample Usage --------------------------
-
-
-	var PT = new PrayTimes('ISNA');
-	var times = PT.getTimes(new Date(), [43, -80], -5);
-	document.write('Sunrise = '+ times.sunrise)
-
-
-*/
-
-
-//----------------------- PrayTimes Class ------------------------
-
+console.log('Working as Liquid');
 
 function PrayTimes(method) {
 
@@ -573,389 +512,45 @@ var DMath = {
 
 //---------------------- Init Object -----------------------
 
+const latInput = document.getElementById('lat');
+const longInput = document.getElementById('long');
+const maghrib_start = document.getElementById('maghrib_start');
+const maghrib_adhan = document.getElementById('maghrib_adhan');
+const maghrib_jamat = document.getElementById('maghrib_jamat');
+const latText = latInput.value;
+const longText = longInput.value;
+const timezoneInput = document.getElementById('timezone');
+const timezoneText = timezoneInput.value;
 
 
 
 
-//Geting Latitude and Longitude
+let lat = parseFloat(latText);
+let long = parseFloat(longText);
+let timeZone = parseFloat(timezoneText);
+console.log(timeZone)
 
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(successFunction,errorFunction);
-} else {
-    alert('It seems like Geolocation, which is required for this page, is not enabled in your browser. Please use a browser which supports it.');
-}
-function successFunction(position) {
-    //Geting Latitude and Longitude
-    lat = position.coords.latitude;
-    long = position.coords.longitude;
 
-    console.log('Your latitude is :'+Math.floor(lat)+' and longitude is '+Math.floor(long));
+console.log(lat +' '+long);
 
+var prayTimes = new PrayTimes();
+prayTimes.setMethod('Jafari');
 
-    //Seting Prayer Time According to Lat & Long
+var clientTimezoneOffset = new Date().getTimezoneOffset()/60;
 
-    //Getting all Prayer Field
-    const fazar = document.getElementById('f-start');
-    const duhur = document.getElementById('d-start');
-    const asr = document.getElementById('a-start');
-    const magrib = document.getElementById('m-start');
-    const isha = document.getElementById('i-start');
-    const jummah = document.getElementById('j-start');
-//
+var times = prayTimes.getTimes(new Date(), [lat, long],timeZone,'12h');
 
+const sunset = new Date('2022-01-01T' + times.sunset + 'Z')
+    .toLocaleTimeString('en-US',
+        {timeZone:'UTC',hour12:true,hour:'numeric',minute:'numeric'}
+    );
 
-    var prayTimes = new PrayTimes();
-    prayTimes.setMethod('Jafari');
 
-//Get Local Timezone Offset
-    var clientTimezoneOffset = new Date().getTimezoneOffset()/60;
-//
+maghrib_start.value = sunset;
+maghrib_adhan.value = sunset;
+maghrib_jamat.value = sunset;
 
 
-    var times = prayTimes.getTimes(new Date(), [lat, long],'auto','12h');
 
-// Converting time to 12h Format For each prayer time
-
-//Fazar
-    const fazarTime = new Date('1970-01-01T' + times.fajr + 'Z')
-        .toLocaleTimeString('en-US',
-            {timeZone:'UTC',hour12:true,hour:'numeric',minute:'numeric'}
-        );
-
-//Dhuhur
-    const duhurTime = new Date('1970-01-01T' + times.dhuhr + 'Z')
-        .toLocaleTimeString('en-US',
-            {timeZone:'UTC',hour12:true,hour:'numeric',minute:'numeric'}
-        );
-
-    //Asr
-    const asrTime = new Date('1970-01-01T' + times.asr + 'Z')
-        .toLocaleTimeString('en-US',
-            {timeZone:'UTC',hour12:true,hour:'numeric',minute:'numeric'}
-        );
-
-
-//Maghrib
-    const maghribTime = new Date('1970-01-01T' + times.maghrib + 'Z')
-        .toLocaleTimeString('en-US',
-            {timeZone:'UTC',hour12:true,hour:'numeric',minute:'numeric'}
-        );
-
-
-    //Isha
-    const ishaTime = new Date('1970-01-01T' + times.isha + 'Z')
-        .toLocaleTimeString('en-US',
-            {timeZone:'UTC',hour12:true,hour:'numeric',minute:'numeric'}
-        );
-    //Isha
-
-
-
-
-
-//Setting the time
-    fazar.innerText = fazarTime;
-    duhur.innerText = duhurTime;
-    asr.innerText = asrTime;
-    magrib.innerText = maghribTime;
-    isha.innerText = ishaTime;
-
-
-    //Finding IP (Not Necessary)
-
-    $.getJSON('https://api.ipify.org?format=json', function(data){
-        console.log(data.ip);
-        console.log(data.latitude );
-
-
-    });
-    //Finding Location
-
-
-    function ipLookUp () {
-        $.ajax('http://ip-api.com/json')
-            .then(
-                function success(response) {
-
-                    console.log('User\'s Country', response.country);
-                    console.log('User\'s Country', response.city);
-                    console.log('User\'s Country', response.regionName);
-
-                    const name = document.getElementById('name');
-                    name.innerText = response.city +', '+response.regionName +', '+response.country;
-                },
-
-                function fail(data, status) {
-                    console.log('Request failed.  Returned status of',
-                        status);
-                }
-            );
-    }
-    ipLookUp()
-
-
-//Function Ends
-}
-function errorFunction() {
-    switch(error.code){
-        case error.PERMISSION_DENIED:
-            alert("User denied the request for Geolocation.");
-            break;
-        case error.POSITION_UNAVAILABLE:
-            alert('Location information is unavailable.');
-            break;
-        case error.TIMEOUT:
-            alert("The request to get user location timed out.");
-            break;
-        case error.UNKNOWN_ERROR:
-            alert("An unknown error occurred.");
-            break;
-    }
-}
-
-function codeLatLng(lat, lng) {
-    console.log('Function Working!');
-    geocoder = new google.maps.Geocoder();
-    var latlng = new google.maps.LatLng(lat, lng);
-    geocoder.geocode({'latLng': latlng}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            console.log(results)
-            if (results[1]) {
-                //formatted address
-                alert(results[0].formatted_address)
-                //find country name
-                for (var i=0; i<results[0].address_components.length; i++) {
-                    for (var b=0;b<results[0].address_components[i].types.length;b++) {
-
-                        //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
-                        if (results[0].address_components[i].types[b] == "administrative_area_level_1") {
-                            //this is the object you are looking for
-                            city= results[0].address_components[i];
-                            break;
-                        }
-                    }
-                }
-                //city data
-                alert(city.short_name + " " + city.long_name)
-
-
-            } else {
-                alert("No results found");
-            }
-        } else {
-            alert("Geocoder failed due to: " + status);
-        }
-    });
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Image Slider
-var slideIndex = 0;
-carousel();
-
-function carousel() {
-    var i;
-    var x = document.getElementsByClassName("mySlides");
-    for (i = 0; i < x.length; i++) {
-        x[i].style.display = "none";
-    }
-    slideIndex++;
-    if (slideIndex > x.length) { slideIndex = 1 }
-    x[slideIndex - 1].style.display = "block";
-    setTimeout(carousel, 3000); // Change image every 3 seconds
-}
-
-
-// Time For Clock
-let a;
-let time;
-setInterval(() => {
-    a = new Date();
-    let time = a.toLocaleTimeString();
-    // time = a.getHours() + ':' + a.getMinutes() + ':' + a.getSeconds();
-    document.getElementById('time').innerHTML = time;
-
-
-}, 1000);
-
-
-// Date Day Finding
-const weekday = ["Sun", "Mon", "TUE", "WED", "THU", "Fri", "SAT"];
-const months = ["JAN", "FEB", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const dateBottom = document.getElementById('dateBottom')
-
-const d = new Date();
-let day = weekday[d.getDay()];
-let month = months[d.getMonth()];
-let date = d.getDate();
-let year = d.getFullYear();
-
-dateBottom.innerText = day + ' ' + month + ' ' + date + ' ' + year;
-
-//Play Audio Function
-function playFazar() {
-    var audio = new Audio('assets/audio/azanFaraz.mp3');
-    audio.play();
-
-}
-//Play Audio Function
-function play() {
-    var audio = new Audio('assets/audio/audio.mp3');
-
-
-    console.log('Playing...')
-    audio.play();
-
-
-
-
-
-
-}
-
-// Azan In Start Time
-let at;
-let timeT;
-setInterval(() => {
-    at = new Date();
-    let timeT = a.toLocaleTimeString();
-    // time = a.getHours() + ':' + a.getMinutes() + ':' + a.getSeconds();
-    document.getElementById('time').innerHTML = timeT;
-    var time1 = moment().format("hh:mm")
-    let fullTime = time1 + " " + timeT.slice(-2);
-    const fazar = document.getElementById('f-start').innerText;
-    const duhur = document.getElementById('d-start').innerText;
-    const asr = document.getElementById('a-start').innerText;
-    const magrib = document.getElementById('m-start').innerText;
-    const isha = document.getElementById('i-start').innerText;
-    const jummah = document.getElementById('j-start').innerText;
-
-
-    var resultFazar = fullTime.localeCompare(fazar);
-    var resultDuhur = fullTime.localeCompare(duhur);
-    var resultAsr = fullTime.localeCompare(asr);
-    var resultMagrib = fullTime.localeCompare(magrib);
-    var resultIsha = fullTime.localeCompare(isha);
-    var resultJummah = fullTime.localeCompare(jummah);
-
-    if (resultFazar == 0) {
-        playFazar();
-
-    }
-    if (resultDuhur == 0 || resultAsr == 0 || resultMagrib == 0 || resultIsha == 0 && day != 'Fri') {
-        play();
-    }
-    if (resultJummah == 0) {
-        play();
-    }
-    console.log(fullTime + ' ' + jummah + ' ' + resultJummah)
-
-
-
-}, 56000);
-
-
-
-
-// // Toggle Button State
-// const toggleButton = document.getElementById('togBtn');
-// const englishTable  = document.getElementById('eng-table');
-// const banglaTable  = document.getElementById('ban-table');
-// const titleName = document.getElementById('arabic')
-// const slider = document.getElementById('slider')
-//
-// const titleNameB = document.getElementById('bangla')
-//
-// banglaTable.style.display = 'none';
-// titleNameB.style.display= 'none';
-
-// toggleButton.addEventListener('click', function () {
-//     var isChecked = toggleButton.checked;
-//     if(isChecked)
-//     {
-//         console.log("Green Bangla!")
-//         englishTable.style.display = 'none';
-//         banglaTable.style.display = 'table';
-//         titleName.style.color = '#D92828'
-//         slider.style.background = "rgb(18,1,1)"
-//         slider.style.background = "linear-gradient(90deg, rgba(18,1,1,1) 0%, rgba(212,14,14,1) 49%, rgba(29,2,2,1) 100%)";
-//         titleName.style.display = 'none'
-//         titleNameB.style.display = 'block'
-//         titleNameB.style.color = 'block'
-//
-//     }
-//     else{
-//         console.log("Blue Eng!")
-//         englishTable.style.display = 'table';
-//         banglaTable.style.display = 'none';
-//         titleName.style.color = '#0B2183'
-//         slider.style.background = "rgb(0,1,22)"
-//         slider.style.background = "linear-gradient(90deg, rgba(0,1,22,1) 0%, rgba(59,40,167,1) 52%, rgba(33,2,55,1) 100%)";
-//         titleName.style.display = 'block'
-//         titleNameB.style.display = 'none'
-//     }
-//
-// })
-
-// Full Screen
-const  fullScreenButton = document.getElementById('fullScreen');
-const  exitFullScreenButton = document.getElementById('exitFScreeen');
-exitFullScreenButton.style.display = 'none';
-
-var elem = document.documentElement;
-fullScreenButton.addEventListener('click',function () {
-    console.log('Working!!');
-    if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-    } else if (elem.webkitRequestFullscreen) { /* Safari */
-        elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) { /* IE11 */
-        elem.msRequestFullscreen();
-    }
-
-
-
-
-});
-exitFullScreenButton.addEventListener('click',function () {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-        window.top.document.msExitFullscreen();
-    }
-
-})
-// Exit Full Screen Event Handel
-var fulScreenCount = 0;
-document.addEventListener("fullscreenchange", function() {
-    if(fulScreenCount ==0)
-    {
-        fullScreenButton.style.display = 'none'
-        fulScreenCount =1
-        exitFullScreenButton.style.display = 'inline';
-    }
-    else{
-        fullScreenButton.style.display = 'inline';
-        fulScreenCount =0
-        exitFullScreenButton.style.display = 'none';
-    }
-});
 
 

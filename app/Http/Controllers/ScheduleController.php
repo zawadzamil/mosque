@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Adhan;
+use App\Models\City;
+use App\Models\Country;
 use App\Models\Jamat;
 use App\Models\Mosque;
 use App\Models\Schedule;
@@ -18,7 +20,31 @@ class ScheduleController extends Controller
      */
     public function index($id)
     {
-        return view('admin.mosque.schedule')->with('mosque_id',$id);
+        $cityId = Mosque::where('id',$id)->value('city');
+        $country_id = Mosque::where('id',$id)->value('country');
+        $lat = City::where('id',$cityId)->value('latitude');
+        $long = City::where('id',$cityId)->value('longitude');
+
+        $country = Country::find($country_id);
+
+        $offset = $country->timezones;
+
+        $offset = str_replace("[", "", $offset);
+        $offset = str_replace("]", "", $offset);
+
+        $offset = json_decode($offset, true);
+
+        $timezoneOffset = $offset['gmtOffsetName'];
+        $timezoneOffset = str_replace("UTC", "", $timezoneOffset);
+        $timezoneOffset = str_replace(":", ".", $timezoneOffset);
+        $timezoneOffset = str_replace("+", "", $timezoneOffset);
+        $timezone = (float)$timezoneOffset;
+
+
+        return view('admin.mosque.schedule')->with('mosque_id',$id)
+            ->with('lat',$lat)
+            ->with('long',$long)
+            ->with('timezone',$timezone);
 
     }
 
@@ -55,6 +81,7 @@ class ScheduleController extends Controller
                 'maghrib_start' => ['required'],
                 'isha_start' => ['required'],
                 'jummah_start' => ['required'],
+                'addedTimeStart' =>['required','min:0','max:100']
 
             ]);
             $start_selected = true;
@@ -71,6 +98,7 @@ class ScheduleController extends Controller
                 'maghrib_adhan' => ['required'],
                 'isha_adhan' => ['required'],
                 'jummah_adhan' => ['required'],
+                'addedTimeAdhan' =>['required','min:0','max:100']
 
             ]);
             $adhan_selected  = true;
@@ -87,6 +115,7 @@ class ScheduleController extends Controller
                 'maghrib_jamat' => ['required'],
                 'isha_jamat' => ['required'],
                 'jummah_jamat' => ['required'],
+                'addedTimeJamat' =>['required','min:0','max:100']
 
             ]);
             $jamat_selected  = true;
@@ -113,7 +142,7 @@ class ScheduleController extends Controller
                 'fazar' =>$request->fazar_start,
                 'dhuhr' =>$request->dhuhr_start,
                 'asr' =>$request->asr_start,
-                'maghrib' =>$request->maghrib_start,
+                'maghrib' =>date( "h:i A", strtotime($request->maghrib_start)+(60*$request->addedTimeStart) ),
                 'isha' =>$request->isha_start,
                 'jummah' =>$request->jummah_start,
             ]);
@@ -127,7 +156,7 @@ class ScheduleController extends Controller
                 'fazar' =>$request->faraz_adhan,
                 'dhuhr' =>$request->dhuhr_adhan,
                 'asr' =>$request->asr_adhan,
-                'maghrib' =>$request->maghrib_adhan,
+                'maghrib' =>date( "h:i A", strtotime($request->maghrib_adhan)+(60*$request->addedTimeAdhan) ),
                 'isha' =>$request->isha_adhan,
                 'jummah' =>$request->jummah_adhan,
             ]);
@@ -142,7 +171,7 @@ class ScheduleController extends Controller
                 'fazar' =>$request->fazar_jamat,
                 'dhuhr' =>$request->dhuhr_jamat,
                 'asr' =>$request->asr_jamat,
-                'maghrib' =>$request->maghrib_jamat,
+                'maghrib' =>date( "h:i A", strtotime($request->maghrib_jamat)+(60*$request->addedTimeJamat) ),
                 'isha' =>$request->isha_jamat,
                 'jummah' =>$request->jummah_jamat,
             ]);
@@ -213,6 +242,30 @@ class ScheduleController extends Controller
         $jamat = Jamat::find($jamatId);
         $jamatCount = Jamat::where('id',$jamatId)->count();
 
+        $cityId = Mosque::where('id',$mosqueId)->value('city');
+        $lat = City::where('id',$cityId)->value('latitude');
+        $long = City::where('id',$cityId)->value('longitude');
+
+       $countryId = Mosque::where('id',$mosqueId)->value('country');
+       $country = Country::find($countryId);
+       $offset = $country->timezones;
+
+        $offset = str_replace("[", "", $offset);
+        $offset = str_replace("]", "", $offset);
+
+        $offset = json_decode($offset, true);
+
+        $timezoneOffset = $offset['gmtOffsetName'];
+        $timezoneOffset = str_replace("UTC", "", $timezoneOffset);
+        $timezoneOffset = str_replace(":", ".", $timezoneOffset);
+        $timezoneOffset = str_replace("+", "", $timezoneOffset);
+        $timezone = (float)$timezoneOffset;
+
+
+
+
+
+
         return view('admin.mosque.edit-schedule')->with('schedule',$schedule)
             ->with('mosque_id',$mosqueId)
             ->with('schedule_id',$scheduleId)
@@ -221,7 +274,11 @@ class ScheduleController extends Controller
             ->with('jamat',$jamat)
             ->with('startCount',$startCount)
             ->with('adhanCount',$adhanCount)
-            ->with('jamatCount',$jamatCount);
+            ->with('jamatCount',$jamatCount)
+            ->with('lat',$lat)
+            ->with('long',$long)
+            ->with('timezone',$timezone)
+            ;
     }
 
     /**
@@ -257,6 +314,7 @@ class ScheduleController extends Controller
                 'maghrib_start' => ['required'],
                 'isha_start' => ['required'],
                 'jummah_start' => ['required'],
+                'addedTimeStart' => ['required','min:0','max:100'],
 
             ]);
             if($starCount >0)
@@ -264,7 +322,7 @@ class ScheduleController extends Controller
                 $start->fazar = $request->input('fazar_start');
                 $start->dhuhr = $request->input('dhuhr_start');
                 $start->asr = $request->input('asr_start');
-                $start->maghrib = $request->input('maghrib_start');
+                $start->maghrib = date( "h:i A", strtotime($request->input('maghrib_start'))+(60*$request->input('addedTimeStart')) );
                 $start->isha = $request->input('isha_start');
                 $start->jummah = $request->input('jummah_start');
 
@@ -278,7 +336,7 @@ class ScheduleController extends Controller
                   'fazar' =>$request->fazar_start,
                   'dhuhr' =>$request->dhuhr_start,
                   'asr' =>$request->asr_start,
-                  'maghrib' =>$request->maghrib_start,
+                  'maghrib' =>date( "h:i A", strtotime($request->maghrib_start)+(60*$request->addedTimeStart) ),
                   'isha' =>$request->isha_start,
                   'jummah' =>$request->jummah_start,
               ]);
@@ -299,6 +357,7 @@ class ScheduleController extends Controller
                 'maghrib_adhan' => ['required'],
                 'isha_adhan' => ['required'],
                 'jummah_adhan' => ['required'],
+                'addedTimeAdhan' => ['required','min:0','max:100'],
 
             ]);
             if ($adhanCount>0)
@@ -306,7 +365,7 @@ class ScheduleController extends Controller
                 $adhan->fazar = $request->input('faraz_adhan');
                 $adhan->dhuhr = $request->input('dhuhr_adhan');
                 $adhan->asr = $request->input('asr_adhan');
-                $adhan->maghrib = $request->input('maghrib_adhan');
+                $adhan->maghrib = date( "h:i A", strtotime($request->input('maghrib_adhan'))+(60*$request->input('addedTimeAdhan')) );
                 $adhan->isha = $request->input('isha_adhan');
                 $adhan->jummah = $request->input('jummah_adhan');
 
@@ -319,7 +378,7 @@ class ScheduleController extends Controller
                     'fazar' =>$request->fazar_start,
                     'dhuhr' =>$request->dhuhr_start,
                     'asr' =>$request->asr_start,
-                    'maghrib' =>$request->maghrib_start,
+                    'maghrib' =>date( "h:i A", strtotime($request->maghrib_adhan)+(60*$request->addedTimeAdhan) ),
                     'isha' =>$request->isha_start,
                     'jummah' =>$request->jummah_start,
                 ]);
@@ -341,6 +400,7 @@ class ScheduleController extends Controller
                 'maghrib_jamat' => ['required'],
                 'isha_jamat' => ['required'],
                 'jummah_jamat' => ['required'],
+                'addedTimeJamat' => ['required','min:0','max:100'],
 
             ]);
             if($jamatCount>0)
@@ -348,7 +408,7 @@ class ScheduleController extends Controller
                 $jamat->fazar = $request->input('faraz_jamat');
                 $jamat->dhuhr = $request->input('dhuhr_jamat');
                 $jamat->asr = $request->input('asr_jamat');
-                $jamat->maghrib = $request->input('maghrib_jamat');
+                $jamat->maghrib = date( "h:i A", strtotime($request->input('maghrib_jamat'))+(60*$request->input('addedTimeJamat')) );
                 $jamat->isha = $request->input('isha_jamat');
                 $jamat->jummah = $request->input('jummah_jamat');
 
@@ -361,7 +421,7 @@ class ScheduleController extends Controller
                   'fazar' =>$request->fazar_start,
                   'dhuhr' =>$request->dhuhr_start,
                   'asr' =>$request->asr_start,
-                  'maghrib' =>$request->maghrib_start,
+                  'maghrib' =>date( "h:i A", strtotime($request->maghrib_jamat)+(60*$request->addedTimeJamat) ),
                   'isha' =>$request->isha_start,
                   'jummah' =>$request->jummah_start,
               ]);

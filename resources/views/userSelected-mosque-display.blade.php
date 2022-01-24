@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Islamic Association</title>
+    <title>PTD-Prayer Time Display</title>
     <link rel="stylesheet" href="public/display/css/display.css" type="text/css" media="all">
     <!--Tailwind CSS-->
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
@@ -84,6 +84,15 @@
 {{--        </div>--}}
 {{--    </label>--}}
     <!--End Toggle Switch-->
+    <div class="sign">
+        <a href="{{url('select-mosques')}}">
+            <button class='w-60 bg-gray-700 text-white p-1  rounded-lg' style="position: relative"> Choose Location/ Mosques</button>
+        </a>
+
+        <button class='w-16 bg-yellow-800 text-white p-1  rounded-lg ' id="fullScreen" style="position: relative">[ ]</button>
+        <button class='w-16 bg-orange-800 text-white p-1 rounded-lg ' id="exitFScreeen" style="position: relative">> <</button>
+
+    </div>
     <div class="flex-1 max-w-8xl ">
         <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2  gap-1 grid-flow-row pb-4 ">
             <!--Table Section-->
@@ -299,8 +308,55 @@
 </div>
 
 
+<script >
+    // Full Screen
+    const  fullScreenButton = document.getElementById('fullScreen');
+    const  exitFullScreenButton = document.getElementById('exitFScreeen');
+    exitFullScreenButton.style.display = 'none';
+
+    var elem = document.documentElement;
+    fullScreenButton.addEventListener('click',function () {
+        console.log('Working!!');
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        }
 
 
+
+
+    });
+    exitFullScreenButton.addEventListener('click',function () {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            window.top.document.msExitFullscreen();
+        }
+
+    })
+    // Exit Full Screen Event Handel
+    var fulScreenCount = 0;
+    document.addEventListener("fullscreenchange", function() {
+        if(fulScreenCount ==0)
+        {
+            fullScreenButton.style.display = 'none'
+            fulScreenCount =1
+            exitFullScreenButton.style.display = 'inline';
+        }
+        else{
+            fullScreenButton.style.display = 'inline';
+            fulScreenCount =0
+            exitFullScreenButton.style.display = 'none';
+        }
+    });
+</script>
 
 <script src="public/display/js/app.js"></script>
 

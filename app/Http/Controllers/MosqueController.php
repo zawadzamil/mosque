@@ -166,42 +166,5 @@ class MosqueController extends Controller
         return redirect('/');
     }
 
-    public function userSelect(Request $request){
-       $mosque_name = Mosque::where('id',$request->mosque_id)->value('name');
-       $scheduleId = Schedule::where('mosque_id',$request->mosque_id)->value('id');
-       $scheduleCount = Schedule::where('mosque_id',$request->mosque_id)->count();
-       $schedule = Schedule::find($scheduleId);
-       $notices = Notice::where('mosque_id',$request->mosque_id)->get();
-       $photos = Gallery::where('mosque_id',$request->mosque_id)->get();
 
-        $startId = Start::where('schedule_id',$scheduleId)->value('id');
-        $adhanId = Adhan::where('schedule_id',$scheduleId)->value('id');
-        $jamatId = Jamat::where('schedule_id',$scheduleId)->value('id');
-
-        $startCount = Start::where('id',$startId)->count();
-        $adhanCount = Adhan::where('id',$adhanId)->count();
-        $jamatCount = Jamat::where('id',$jamatId)->count();
-
-        $start = Start::find($startId);
-        $adhan = Adhan::find($adhanId);
-        $jamat = Jamat::find($jamatId);
-
-       if($scheduleCount<1)
-       {
-           return redirect()->back()->with('failed','Seleccted Mosques Schedule is not Available Yet. Please Select Different Mosque');
-       }
-
-       return view('userSelected-mosque-display')->with('mosque_name',$mosque_name)
-           ->with('schedule',$schedule)
-           ->with('notices',$notices)
-           ->with('photos',$photos)
-           ->with('startCount',$startCount)
-           ->with('adhanCount',$adhanCount)
-           ->with('jamatCount',$jamatCount)
-           ->with('start',$start)
-           ->with('adhan',$adhan)
-           ->with('jamat',$jamat);
-
-
-    }
 }

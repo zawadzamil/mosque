@@ -77,7 +77,9 @@
                                     <tr>
                                         <td>
                                             <label for="maghrib">Maghrib</label>
-                                            <input type="time" name="maghrib_start" id="maghrib_start" value="{{$start->maghrib}}" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg ">
+                                            <input type="text" name="maghrib_start" id="maghrib_start" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg w-24   " readonly> +
+                                            <input type="number" min="0" max="100" name="addedTimeStart" value="0" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg w-13 px-2" > Min
+
                                         </td>
                                     </tr>
 
@@ -125,7 +127,9 @@
                                 <tr>
                                     <td>
                                         <label for="maghrib">Maghrib</label>
-                                        <input type="time" name="maghrib_start" id="maghrib_start"  class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg ">
+                                        <input type="text" name="maghrib_start" id="maghrib_start" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg w-24   " readonly> +
+                                        <input type="number" min="0" max="100" name="addedTimeStart" value="0" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg w-13 px-2" > Min
+
                                     </td>
                                 </tr>
 
@@ -184,7 +188,9 @@
                                 <tr>
                                     <td>
                                         <label for="maghrib_adhan">Maghrib</label>
-                                        <input type="time" name="maghrib_adhan" id="maghrib_adhan" value="{{$adhan->maghrib}}" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg ">
+                                        <input type="text" name="maghrib_adhan" id="maghrib_adhan" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg w-24   " readonly> +
+                                        <input type="number" min="0" max="100" name="addedTimeAdhan" value="0" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg w-13 px-2" > Min
+
                                     </td>
                                 </tr>
 
@@ -232,7 +238,9 @@
                                     <tr>
                                         <td>
                                             <label for="maghrib_adhan">Maghrib</label>
-                                            <input type="time" name="maghrib_adhan" id="maghrib_adhan" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg ">
+                                            <input type="text" name="maghrib_adhan" id="maghrib_adhan" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg w-24   " readonly> +
+                                            <input type="number" min="0" max="100" name="addedTimeAdhan" value="0" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg w-13 px-2" > Min
+
                                         </td>
                                     </tr>
 
@@ -300,7 +308,9 @@
                                 <tr>
                                     <td>
                                         <label for="maghrib_jamat">Maghrib</label>
-                                        <input type="time" name="maghrib_jamat" id="maghrib_jamat" value="{{$jamat->maghrib}}" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg ">
+                                        <input type="text" name="maghrib_jamat" id="maghrib_jamat" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg w-24   " readonly> +
+                                        <input type="number" min="0" max="100" name="addedTimeJamat" value="0" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg w-13 px-2" > Min
+
                                     </td>
                                 </tr>
 
@@ -351,7 +361,9 @@
                                     <tr>
                                         <td>
                                             <label for="maghrib_jamat">Maghrib</label>
-                                            <input type="time" name="maghrib_jamat" id="maghrib_jamat" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg ">
+                                            <input type="text" name="maghrib_jamat" id="maghrib_jamat" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg w-24   " readonly> +
+                                            <input type="number" min="0" max="100" name="addedTimeJamat" value="0" class="p-2 ml-1 bg-cyan-300 shadow-xl rounded-lg w-13 px-2" > Min
+
                                         </td>
                                     </tr>
 
@@ -398,6 +410,9 @@
 
 
             </form>
+        <input type="hidden" id="lat" value="{{$lat}}">
+        <input type="hidden" id="long" value="{{$long}}" >
+        <input type="hidden" id="timezone" value="{{$timezone}}" >
 
 
     </div>
@@ -506,6 +521,7 @@
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="public/display/js/timer.js"> </script>
 
 @endsection
 <style>
